@@ -6,9 +6,9 @@ import { galleryItems } from './gallery-items.js';
 //? Створення і рендер розмітки на підставі масиву даних galleryItems і наданого шаблону елемента галереї.
 // ? Реалізація делегування на ul.gallery і ******** отримання url великого зображення.
 //? Підключення скрипту і стилів бібліотеки модального вікна basicLightbox. Використовуй CDN сервіс jsdelivr і додай у проект посилання на мініфіковані (.min) файли бібліотеки.
-// Відкриття модального вікна по кліку на елементі галереї. Для цього ознайомся з документацією і прикладами.
-// Заміна значення атрибута src елемента <img> в модальному вікні перед відкриттям. Використовуй готову розмітку модального вікна із зображенням з прикладів бібліотеки basicLightbox.
-// Розмітка елемента галереї
+//? Відкриття модального вікна по кліку на елементі галереї. Для цього ознайомся з документацією і прикладами.
+//? Заміна значення атрибута src елемента <img> в модальному вікні перед відкриттям. Використовуй готову розмітку модального вікна із зображенням з прикладів бібліотеки basicLightbox.
+//? Розмітка елемента галереї
 // Посилання на оригінальне зображення повинно зберігатися в data-атрибуті source на елементі <img>, і вказуватися в href посилання. Не додавай інші HTML теги або CSS класи, крім тих, що містяться в цьому шаблоні.
 
 // <li class="gallery__item">
@@ -33,16 +33,40 @@ import { galleryItems } from './gallery-items.js';
 
 const listEl = document.querySelector(".gallery");
 
-const galleryMarkup = galleryItems.map(({description, preview}) => {
-    return `<li data-name="${description} class="js-item"><img src="${preview}" alt="${description}"></li>`
+const galleryMarkup = galleryItems.map(({description, preview, original}) => {
+    return `<li class="gallery__item" data-name="${description}">
+    <a class="gallery__link" href="${original}">
+      <img
+        class="gallery__image"
+        src="${preview}"
+        data-source="${original}"
+        alt="${description}"
+      />
+    </a>
+  </li>`
 }).join("");
+
 
 listEl.insertAdjacentHTML('beforeend', galleryMarkup);
 listEl.addEventListener('click', onClick);
 
 function onClick(event) {
-    if (!event.target.classList.contains("js-item")) {
+    event.preventDefault();
+
+    if (!event.target.classList.contains("gallery__image")) {
         return
     }
 
+const targetPhotoData = event.target.closest(".gallery__item").dataset.name;
+// console.log(targetPhotoData);
+
+const targetObject = galleryItems.find(({description}) => description === targetPhotoData);
+console.log(targetObject);
+
+const instance = basicLightbox.create(`
+<div class="modal">
+<img src="${targetObject.original}" alt="${targetObject.description}" >
+</div>
+`)
+instance.show()
 }
