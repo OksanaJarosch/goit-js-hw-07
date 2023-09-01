@@ -15,27 +15,11 @@ const galleryMarkup = galleryItems.map(({description, preview, original}) => {
 }).join("");
 
 listEl.insertAdjacentHTML('beforeend', galleryMarkup);
-listEl.addEventListener('click', onClick);
 
-function onClick(event) {
-    event.preventDefault();
+const lightboxModal = new SimpleLightbox('.gallery a', 
+{
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
 
-    if (!event.target.classList.contains("gallery__image")) {
-        return
-    }
-
-const targetPhotoData = event.target.closest(".gallery__item").dataset.name;
-
-const targetObject = galleryItems.find(({description}) => description === targetPhotoData);
-
-// SimpleLightbox - Modal Window
-const modalMarkup = `<div class="gallery">
-// <a href="${targetObject.original}"><img src="${targetObject.original}" alt="" title="${targetObject.description}"/></a>
-// </div>`;
-
-var lightbox = new SimpleLightbox('.gallery a', modalMarkup);
-
-  }
-
-
-// Подивися в документації секцію «Options» і додай відображення підписів до зображень з атрибута alt. Нехай підпис буде знизу і з'являється через 250 мілісекунд після відкриття зображення.
