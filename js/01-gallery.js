@@ -40,16 +40,20 @@ instance.show()
 
 
 //close with Esc
+const visible = basicLightbox.visible()
+console.log(visible);
 
-if (instance.visible) {
+if (visible) {
     listEl.addEventListener('keydown', onCloseEsc);
-}
+} 
 
 function onCloseEsc(event) {
     if (event.code === 'Escape') {
       instance.close()
       listEl.removeEventListener('keydown', onCloseEsc);
   }  
-}
+  
 }
 
+instance.element().addEventListener('click', () => {  instance.close();  listEl.removeEventListener('keydown', onCloseEsc);});
+}
